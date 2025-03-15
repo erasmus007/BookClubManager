@@ -20,9 +20,34 @@
     </header>
 
     <main>
-        <section id="home">
+        <section id="home" class="active-section">
             <h2>Welcome to Book Club Manager</h2>
             <p>Manage your book club activities, track reading progress, and engage in discussions.</p>
+        </section>
+
+        <section id="books" class="hidden-section">
+            <h2>Book Management</h2>
+            <div class="add-book-form">
+                <h3>Add New Book</h3>
+                <input type="text" id="book-title" placeholder="Book Title">
+                <input type="text" id="book-author" placeholder="Author">
+                <input type="date" id="reading-date">
+                <button onclick="addBook()">Add Book</button>
+            </div>
+            <div id="books-list">
+                <h3>Current Reading List</h3>
+                <div id="book-items"></div>
+            </div>
+        </section>
+
+        <section id="members" class="hidden-section">
+            <h2>Members</h2>
+            <p>Member management coming soon...</p>
+        </section>
+
+        <section id="discussions" class="hidden-section">
+            <h2>Discussions</h2>
+            <p>Discussion features coming soon...</p>
         </section>
     </main>
 
