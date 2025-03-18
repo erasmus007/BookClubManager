@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     loadBooks();
+    loadMembers();
     console.log('Book Club Manager initialized');
 });
 
@@ -96,5 +97,74 @@ function loadBooks() {
         const data = JSON.parse(saved);
         bookClubData.books = data.books || [];
         displayBooks();
+    }
+}
+
+// Member management functions
+function addMember() {
+    const name = document.getElementById('member-name').value;
+    const email = document.getElementById('member-email').value;
+    const role = document.getElementById('member-role').value;
+
+    if (!name || !email) {
+        alert('Please fill in both name and email');
+        return;
+    }
+
+    // Simple email validation
+    if (!email.includes('@')) {
+        alert('Please enter a valid email address');
+        return;
+    }
+
+    const member = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        role: role,
+        joinDate: new Date().toISOString().split('T')[0]
+    };
+
+    bookClubData.members.push(member);
+    saveMembers();
+    displayMembers();
+    clearMemberForm();
+}
+
+function displayMembers() {
+    const memberItems = document.getElementById('member-items');
+    memberItems.innerHTML = '';
+
+    bookClubData.members.forEach(member => {
+        const memberDiv = document.createElement('div');
+        memberDiv.className = 'member-item';
+        memberDiv.innerHTML = `
+            <div class="member-info">
+                <h4>${member.name}</h4>
+                <p><strong>Email:</strong> ${member.email}</p>
+                <p><strong>Joined:</strong> ${member.joinDate}</p>
+            </div>
+            <span class="member-role ${member.role}">${member.role}</span>
+        `;
+        memberItems.appendChild(memberDiv);
+    });
+}
+
+function clearMemberForm() {
+    document.getElementById('member-name').value = '';
+    document.getElementById('member-email').value = '';
+    document.getElementById('member-role').value = 'member';
+}
+
+function saveMembers() {
+    localStorage.setItem('bookClubData', JSON.stringify(bookClubData));
+}
+
+function loadMembers() {
+    const saved = localStorage.getItem('bookClubData');
+    if (saved) {
+        const data = JSON.parse(saved);
+        bookClubData.members = data.members || [];
+        displayMembers();
     }
 }

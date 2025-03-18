@@ -74,19 +74,19 @@ h2 {
 }
 
 /* Form styling */
-.add-book-form {
+.add-book-form, .add-member-form {
     background: #f8f9fa;
     padding: 1.5rem;
     border-radius: 6px;
     margin-bottom: 2rem;
 }
 
-.add-book-form h3 {
+.add-book-form h3, .add-member-form h3 {
     margin-bottom: 1rem;
     color: #2c3e50;
 }
 
-.add-book-form input {
+.add-book-form input, .add-member-form input, .add-member-form select {
     width: 100%;
     padding: 0.5rem;
     margin: 0.5rem 0;
@@ -95,7 +95,7 @@ h2 {
     font-size: 1rem;
 }
 
-.add-book-form button {
+.add-book-form button, .add-member-form button {
     background-color: #3498db;
     color: white;
     padding: 0.75rem 1.5rem;
@@ -106,7 +106,7 @@ h2 {
     margin-top: 0.5rem;
 }
 
-.add-book-form button:hover {
+.add-book-form button:hover, .add-member-form button:hover {
     background-color: #2980b9;
 }
 
@@ -127,4 +127,42 @@ h2 {
 .book-item p {
     margin: 0.25rem 0;
     color: #666;
+}
+
+/* Member item styling */
+.member-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+    border-left: 4px solid #27ae60;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.member-info h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.member-info p {
+    margin: 0.25rem 0;
+    color: #666;
+}
+
+.member-role {
+    background: #27ae60;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.9rem;
+}
+
+.member-role.moderator {
+    background: #f39c12;
+}
+
+.member-role.admin {
+    background: #e74c3c;
 }

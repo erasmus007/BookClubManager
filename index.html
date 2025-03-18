@@ -41,8 +41,22 @@
         </section>
 
         <section id="members" class="hidden-section">
-            <h2>Members</h2>
-            <p>Member management coming soon...</p>
+            <h2>Member Management</h2>
+            <div class="add-member-form">
+                <h3>Add New Member</h3>
+                <input type="text" id="member-name" placeholder="Member Name">
+                <input type="email" id="member-email" placeholder="Email Address">
+                <select id="member-role">
+                    <option value="member">Member</option>
+                    <option value="moderator">Moderator</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button onclick="addMember()">Add Member</button>
+            </div>
+            <div id="members-list">
+                <h3>Club Members</h3>
+                <div id="member-items"></div>
+            </div>
         </section>
 
         <section id="discussions" class="hidden-section">
