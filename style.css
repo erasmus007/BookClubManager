@@ -166,3 +166,108 @@ h2 {
 .member-role.admin {
     background: #e74c3c;
 }
+
+/* Discussion styling */
+.discussion-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.discussion-controls select {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.discussion-controls button {
+    background-color: #9b59b6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.discussion-controls button:hover {
+    background-color: #8e44ad;
+}
+
+.discussion-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+    border-left: 4px solid #9b59b6;
+    cursor: pointer;
+}
+
+.discussion-item:hover {
+    background: #e9ecef;
+}
+
+.discussion-item h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.discussion-item p {
+    margin: 0.25rem 0;
+    color: #666;
+}
+
+.hidden {
+    display: none;
+}
+
+.message-form {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid #eee;
+}
+
+.message-form textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 1rem;
+}
+
+.message-form button {
+    background-color: #9b59b6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.message-form button:hover {
+    background-color: #8e44ad;
+}
+
+.message {
+    background: white;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+    border-left: 3px solid #9b59b6;
+}
+
+.message-author {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.message-time {
+    color: #999;
+    font-size: 0.9rem;
+    float: right;
+}

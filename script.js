@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loadBooks();
     loadMembers();
+    loadDiscussions();
+    updateDiscussionBookOptions();
     console.log('Book Club Manager initialized');
 });
 
@@ -62,6 +64,7 @@ function addBook() {
     saveBooks();
     displayBooks();
     clearBookForm();
+    updateDiscussionBookOptions();
 }
 
 function displayBooks() {
@@ -166,5 +169,157 @@ function loadMembers() {
         const data = JSON.parse(saved);
         bookClubData.members = data.members || [];
         displayMembers();
+    }
+}
+
+// Discussion management functions
+let currentDiscussionId = null;
+
+function updateDiscussionBookOptions() {
+    const select = document.getElementById('discussion-book');
+    select.innerHTML = '<option value="">Select a book to discuss</option>';
+
+    bookClubData.books.forEach(book => {
+        const option = document.createElement('option');
+        option.value = book.id;
+        option.textContent = `${book.title} by ${book.author}`;
+        select.appendChild(option);
+    });
+}
+
+function startDiscussion() {
+    const bookId = document.getElementById('discussion-book').value;
+    if (!bookId) {
+        alert('Please select a book first');
+        return;
+    }
+
+    const book = bookClubData.books.find(b => b.id == bookId);
+    if (!book) {
+        alert('Book not found');
+        return;
+    }
+
+    // Check if discussion already exists
+    const existingDiscussion = bookClubData.discussions.find(d => d.bookId == bookId);
+    if (existingDiscussion) {
+        alert('Discussion for this book already exists');
+        return;
+    }
+
+    const discussion = {
+        id: Date.now(),
+        bookId: parseInt(bookId),
+        bookTitle: book.title,
+        bookAuthor: book.author,
+        createdDate: new Date().toISOString().split('T')[0],
+        messages: []
+    };
+
+    bookClubData.discussions.push(discussion);
+    saveDiscussions();
+    displayDiscussions();
+    document.getElementById('discussion-book').value = '';
+}
+
+function displayDiscussions() {
+    const discussionItems = document.getElementById('discussion-items');
+    discussionItems.innerHTML = '';
+
+    bookClubData.discussions.forEach(discussion => {
+        const discussionDiv = document.createElement('div');
+        discussionDiv.className = 'discussion-item';
+        discussionDiv.onclick = () => openDiscussion(discussion.id);
+        discussionDiv.innerHTML = `
+            <h4>${discussion.bookTitle}</h4>
+            <p><strong>Author:</strong> ${discussion.bookAuthor}</p>
+            <p><strong>Started:</strong> ${discussion.createdDate}</p>
+            <p><strong>Messages:</strong> ${discussion.messages.length}</p>
+        `;
+        discussionItems.appendChild(discussionDiv);
+    });
+}
+
+function openDiscussion(discussionId) {
+    currentDiscussionId = discussionId;
+    const discussion = bookClubData.discussions.find(d => d.id === discussionId);
+
+    document.getElementById('discussions-list').style.display = 'none';
+    document.getElementById('discussion-controls').style.display = 'none';
+    document.getElementById('discussion-detail').classList.remove('hidden');
+
+    document.getElementById('discussion-title').textContent =
+        `Discussion: ${discussion.bookTitle} by ${discussion.bookAuthor}`;
+
+    displayMessages(discussion.messages);
+}
+
+function closeDiscussion() {
+    document.getElementById('discussions-list').style.display = 'block';
+    document.getElementById('discussion-controls').style.display = 'flex';
+    document.getElementById('discussion-detail').classList.add('hidden');
+    currentDiscussionId = null;
+}
+
+function displayMessages(messages) {
+    const messagesDiv = document.getElementById('discussion-messages');
+    messagesDiv.innerHTML = '';
+
+    messages.forEach(message => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.innerHTML = `
+            <div class="message-author">
+                ${message.author}
+                <span class="message-time">${message.timestamp}</span>
+            </div>
+            <div>${message.content}</div>
+        `;
+        messagesDiv.appendChild(messageDiv);
+    });
+}
+
+function addMessage() {
+    const content = document.getElementById('new-message').value.trim();
+    if (!content) {
+        alert('Please enter a message');
+        return;
+    }
+
+    if (!currentDiscussionId) {
+        alert('No discussion selected');
+        return;
+    }
+
+    const discussion = bookClubData.discussions.find(d => d.id === currentDiscussionId);
+    if (!discussion) {
+        alert('Discussion not found');
+        return;
+    }
+
+    const message = {
+        id: Date.now(),
+        author: 'Current User', // In a real app, this would be the logged-in user
+        content: content,
+        timestamp: new Date().toLocaleString()
+    };
+
+    discussion.messages.push(message);
+    saveDiscussions();
+    displayMessages(discussion.messages);
+    displayDiscussions(); // Update message count
+    document.getElementById('new-message').value = '';
+}
+
+function saveDiscussions() {
+    localStorage.setItem('bookClubData', JSON.stringify(bookClubData));
+}
+
+function loadDiscussions() {
+    const saved = localStorage.getItem('bookClubData');
+    if (saved) {
+        const data = JSON.parse(saved);
+        bookClubData.discussions = data.discussions || [];
+        displayDiscussions();
     }
 }

@@ -60,8 +60,26 @@
         </section>
 
         <section id="discussions" class="hidden-section">
-            <h2>Discussions</h2>
-            <p>Discussion features coming soon...</p>
+            <h2>Book Discussions</h2>
+            <div class="discussion-controls">
+                <select id="discussion-book">
+                    <option value="">Select a book to discuss</option>
+                </select>
+                <button onclick="startDiscussion()">Start Discussion</button>
+            </div>
+            <div id="discussions-list">
+                <h3>Active Discussions</h3>
+                <div id="discussion-items"></div>
+            </div>
+            <div id="discussion-detail" class="hidden">
+                <h3 id="discussion-title"></h3>
+                <div id="discussion-messages"></div>
+                <div class="message-form">
+                    <textarea id="new-message" placeholder="Add your comment..."></textarea>
+                    <button onclick="addMessage()">Post Message</button>
+                    <button onclick="closeDiscussion()">Back to Discussions</button>
+                </div>
+            </div>
         </section>
     </main>
 
