@@ -71,9 +71,19 @@ function displayBooks() {
     const bookItems = document.getElementById('book-items');
     bookItems.innerHTML = '';
 
+    if (bookClubData.books.length === 0) {
+        bookItems.innerHTML = `
+            <div class="empty-state">
+                <h3>No books yet</h3>
+                <p>Add your first book to get started!</p>
+            </div>
+        `;
+        return;
+    }
+
     bookClubData.books.forEach(book => {
         const bookDiv = document.createElement('div');
-        bookDiv.className = 'book-item';
+        bookDiv.className = 'book-item fade-in';
         bookDiv.innerHTML = `
             <h4>${book.title}</h4>
             <p><strong>Author:</strong> ${book.author}</p>
@@ -138,9 +148,19 @@ function displayMembers() {
     const memberItems = document.getElementById('member-items');
     memberItems.innerHTML = '';
 
+    if (bookClubData.members.length === 0) {
+        memberItems.innerHTML = `
+            <div class="empty-state">
+                <h3>No members yet</h3>
+                <p>Add the first member to your book club!</p>
+            </div>
+        `;
+        return;
+    }
+
     bookClubData.members.forEach(member => {
         const memberDiv = document.createElement('div');
-        memberDiv.className = 'member-item';
+        memberDiv.className = 'member-item fade-in';
         memberDiv.innerHTML = `
             <div class="member-info">
                 <h4>${member.name}</h4>
@@ -226,9 +246,19 @@ function displayDiscussions() {
     const discussionItems = document.getElementById('discussion-items');
     discussionItems.innerHTML = '';
 
+    if (bookClubData.discussions.length === 0) {
+        discussionItems.innerHTML = `
+            <div class="empty-state">
+                <h3>No discussions yet</h3>
+                <p>Start a discussion about a book to engage with other members!</p>
+            </div>
+        `;
+        return;
+    }
+
     bookClubData.discussions.forEach(discussion => {
         const discussionDiv = document.createElement('div');
-        discussionDiv.className = 'discussion-item';
+        discussionDiv.className = 'discussion-item fade-in';
         discussionDiv.onclick = () => openDiscussion(discussion.id);
         discussionDiv.innerHTML = `
             <h4>${discussion.bookTitle}</h4>

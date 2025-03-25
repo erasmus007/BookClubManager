@@ -271,3 +271,77 @@ h2 {
     font-size: 0.9rem;
     float: right;
 }
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    main {
+        margin: 1rem auto;
+        padding: 0 0.5rem;
+    }
+
+    section {
+        margin: 1rem 0;
+        padding: 1rem;
+    }
+
+    .discussion-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .member-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .add-book-form input, .add-member-form input,
+    .add-member-form select, .message-form textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Loading states and animations */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Empty states */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.empty-state h3 {
+    color: #999;
+    margin-bottom: 1rem;
+}
+
+/* Improved button states */
+button:disabled {
+    background-color: #bdc3c7 !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Better form validation feedback */
+.error {
+    border-color: #e74c3c !important;
+    background-color: #fdf2f2;
+}
+
+.success {
+    border-color: #27ae60 !important;
+    background-color: #f2fdf2;
+}
