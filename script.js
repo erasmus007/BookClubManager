@@ -48,6 +48,7 @@ function addBook() {
     const author = document.getElementById('book-author').value;
     const readingDate = document.getElementById('reading-date').value;
     const status = document.getElementById('book-status').value;
+    const totalPages = parseInt(document.getElementById('book-pages').value) || 0;
 
     if (!title || !author) {
         alert('Please fill in both title and author');
@@ -61,7 +62,9 @@ function addBook() {
         readingDate: readingDate || 'TBD',
         status: status,
         rating: 0,
-        dateAdded: new Date().toISOString().split('T')[0]
+        dateAdded: new Date().toISOString().split('T')[0],
+        totalPages: totalPages,
+        currentPage: 0
     };
 
     bookClubData.books.push(book);
@@ -96,6 +99,7 @@ function displayBooks(filteredBooks = null) {
 
         const ratingStars = generateStarRating(book.rating, book.id);
         const statusBadge = `<span class="status-badge ${book.status}">${book.status}</span>`;
+        const progressHTML = generateProgressHTML(book);
 
         bookDiv.innerHTML = `
             <h4>${book.title}</h4>
@@ -105,6 +109,7 @@ function displayBooks(filteredBooks = null) {
                 <strong>Rating:</strong> ${ratingStars}
             </div>
             <p><strong>Status:</strong> ${statusBadge}</p>
+            ${progressHTML}
         `;
         bookItems.appendChild(bookDiv);
     });
@@ -115,6 +120,7 @@ function clearBookForm() {
     document.getElementById('book-author').value = '';
     document.getElementById('reading-date').value = '';
     document.getElementById('book-status').value = 'planned';
+    document.getElementById('book-pages').value = '';
 }
 
 function saveBooks() {
@@ -427,4 +433,54 @@ function applyFilters() {
     });
 
     displayBooks(filteredBooks);
+}
+
+// Progress tracking functions
+function generateProgressHTML(book) {
+    if (!book.totalPages || book.totalPages <= 0) {
+        return '';
+    }
+
+    const progressPercent = book.totalPages > 0 ? Math.round((book.currentPage / book.totalPages) * 100) : 0;
+
+    return `
+        <div class="progress-container">
+            <strong>Reading Progress:</strong>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progressPercent}%"></div>
+            </div>
+            <div class="progress-text">${book.currentPage || 0} / ${book.totalPages} pages (${progressPercent}%)</div>
+            ${book.status === 'reading' ? `
+                <div class="progress-update">
+                    <span>Update progress:</span>
+                    <input type="number" id="page-input-${book.id}" placeholder="Page" min="0" max="${book.totalPages}">
+                    <button onclick="updateProgress(${book.id})">Update</button>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+function updateProgress(bookId) {
+    const book = bookClubData.books.find(b => b.id === bookId);
+    const pageInput = document.getElementById(`page-input-${bookId}`);
+
+    if (!book || !pageInput) return;
+
+    const newPage = parseInt(pageInput.value);
+    if (isNaN(newPage) || newPage < 0 || newPage > book.totalPages) {
+        alert(`Please enter a valid page number between 0 and ${book.totalPages}`);
+        return;
+    }
+
+    book.currentPage = newPage;
+
+    // Auto-update status if completed
+    if (newPage >= book.totalPages && book.status !== 'completed') {
+        book.status = 'completed';
+    }
+
+    saveBooks();
+    applyFilters();
+    pageInput.value = '';
 }
