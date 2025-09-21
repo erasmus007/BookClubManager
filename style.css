@@ -86,7 +86,7 @@ h2 {
     color: #2c3e50;
 }
 
-.add-book-form input, .add-member-form input, .add-member-form select {
+.add-book-form input, .add-book-form select, .add-member-form input, .add-member-form select {
     width: 100%;
     padding: 0.5rem;
     margin: 0.5rem 0;
@@ -344,4 +344,72 @@ button:disabled {
 .success {
     border-color: #27ae60 !important;
     background-color: #f2fdf2;
+}
+
+/* Rating system */
+.rating-container {
+    margin: 0.5rem 0;
+}
+
+.star-rating {
+    display: inline-flex;
+    gap: 2px;
+    margin: 0.25rem 0;
+}
+
+.star {
+    cursor: pointer;
+    color: #ddd;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
+
+.star.filled {
+    color: #f39c12;
+}
+
+.star:hover {
+    color: #f39c12;
+}
+
+.book-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.25rem 0;
+}
+
+.rating-display {
+    display: inline-flex;
+    gap: 1px;
+}
+
+.rating-display .star {
+    cursor: default;
+    font-size: 1rem;
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-badge.planned {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.status-badge.reading {
+    background-color: #3498db;
+    color: white;
+}
+
+.status-badge.completed {
+    background-color: #27ae60;
+    color: white;
 }

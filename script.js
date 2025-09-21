@@ -46,6 +46,7 @@ function addBook() {
     const title = document.getElementById('book-title').value;
     const author = document.getElementById('book-author').value;
     const readingDate = document.getElementById('reading-date').value;
+    const status = document.getElementById('book-status').value;
 
     if (!title || !author) {
         alert('Please fill in both title and author');
@@ -57,7 +58,9 @@ function addBook() {
         title: title,
         author: author,
         readingDate: readingDate || 'TBD',
-        status: 'planned'
+        status: status,
+        rating: 0,
+        dateAdded: new Date().toISOString().split('T')[0]
     };
 
     bookClubData.books.push(book);
@@ -84,11 +87,18 @@ function displayBooks() {
     bookClubData.books.forEach(book => {
         const bookDiv = document.createElement('div');
         bookDiv.className = 'book-item fade-in';
+
+        const ratingStars = generateStarRating(book.rating, book.id);
+        const statusBadge = `<span class="status-badge ${book.status}">${book.status}</span>`;
+
         bookDiv.innerHTML = `
             <h4>${book.title}</h4>
             <p><strong>Author:</strong> ${book.author}</p>
             <p><strong>Reading Date:</strong> ${book.readingDate}</p>
-            <p><strong>Status:</strong> ${book.status}</p>
+            <div class="book-rating">
+                <strong>Rating:</strong> ${ratingStars}
+            </div>
+            <p><strong>Status:</strong> ${statusBadge}</p>
         `;
         bookItems.appendChild(bookDiv);
     });
@@ -98,6 +108,7 @@ function clearBookForm() {
     document.getElementById('book-title').value = '';
     document.getElementById('book-author').value = '';
     document.getElementById('reading-date').value = '';
+    document.getElementById('book-status').value = 'planned';
 }
 
 function saveBooks() {
@@ -351,5 +362,25 @@ function loadDiscussions() {
         const data = JSON.parse(saved);
         bookClubData.discussions = data.discussions || [];
         displayDiscussions();
+    }
+}
+
+// Rating system functions
+function generateStarRating(currentRating, bookId) {
+    let stars = '<div class="rating-display">';
+    for (let i = 1; i <= 5; i++) {
+        const filled = i <= currentRating ? 'filled' : '';
+        stars += `<span class="star ${filled}" onclick="rateBook(${bookId}, ${i})">★</span>`;
+    }
+    stars += '</div>';
+    return stars;
+}
+
+function rateBook(bookId, rating) {
+    const book = bookClubData.books.find(b => b.id === bookId);
+    if (book) {
+        book.rating = rating;
+        saveBooks();
+        displayBooks();
     }
 }
