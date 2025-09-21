@@ -484,3 +484,77 @@ function updateProgress(bookId) {
     applyFilters();
     pageInput.value = '';
 }
+
+// Data export functions
+function exportData(format) {
+    const data = {
+        books: bookClubData.books,
+        members: bookClubData.members,
+        discussions: bookClubData.discussions,
+        exportDate: new Date().toISOString(),
+        version: '1.0'
+    };
+
+    if (format === 'json') {
+        exportAsJSON(data);
+    } else if (format === 'csv') {
+        exportAsCSV(data);
+    }
+}
+
+function exportAsJSON(data) {
+    const jsonString = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `bookclub-data-${getCurrentDateString()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+function exportAsCSV(data) {
+    // Books CSV
+    let csvContent = 'Title,Author,Status,Rating,Total Pages,Current Page,Reading Date,Date Added\n';
+
+    data.books.forEach(book => {
+        const progress = book.totalPages > 0 ? Math.round((book.currentPage / book.totalPages) * 100) : 0;
+        const row = [
+            escapeCSV(book.title),
+            escapeCSV(book.author),
+            book.status,
+            book.rating || 0,
+            book.totalPages || 0,
+            book.currentPage || 0,
+            book.readingDate || '',
+            book.dateAdded || ''
+        ].join(',');
+        csvContent += row + '\n';
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `bookclub-books-${getCurrentDateString()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+function escapeCSV(str) {
+    if (!str) return '';
+    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+}
+
+function getCurrentDateString() {
+    return new Date().toISOString().split('T')[0];
+}

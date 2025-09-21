@@ -527,3 +527,35 @@ button:disabled {
 .progress-update button:hover {
     background-color: #219a52;
 }
+
+/* Export functionality */
+.export-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.export-btn {
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.export-btn:hover {
+    background-color: #732d91;
+}
+
+@media (max-width: 768px) {
+    .export-buttons {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .export-btn {
+        flex: 1;
+    }
+}
