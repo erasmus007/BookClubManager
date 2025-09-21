@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadMembers();
     loadDiscussions();
     updateDiscussionBookOptions();
+    setupSearchAndFilter();
     console.log('Book Club Manager initialized');
 });
 
@@ -70,21 +71,26 @@ function addBook() {
     updateDiscussionBookOptions();
 }
 
-function displayBooks() {
+function displayBooks(filteredBooks = null) {
     const bookItems = document.getElementById('book-items');
     bookItems.innerHTML = '';
 
-    if (bookClubData.books.length === 0) {
+    const booksToShow = filteredBooks || bookClubData.books;
+
+    if (booksToShow.length === 0) {
+        const message = filteredBooks ? 'No books match your search criteria' : 'No books yet';
+        const subMessage = filteredBooks ? 'Try adjusting your filters' : 'Add your first book to get started!';
+
         bookItems.innerHTML = `
             <div class="empty-state">
-                <h3>No books yet</h3>
-                <p>Add your first book to get started!</p>
+                <h3>${message}</h3>
+                <p>${subMessage}</p>
             </div>
         `;
         return;
     }
 
-    bookClubData.books.forEach(book => {
+    booksToShow.forEach(book => {
         const bookDiv = document.createElement('div');
         bookDiv.className = 'book-item fade-in';
 
@@ -381,6 +387,44 @@ function rateBook(bookId, rating) {
     if (book) {
         book.rating = rating;
         saveBooks();
-        displayBooks();
+        applyFilters();
     }
+}
+
+// Search and filter functions
+function setupSearchAndFilter() {
+    const searchInput = document.getElementById('book-search');
+    const statusFilter = document.getElementById('status-filter');
+    const ratingFilter = document.getElementById('rating-filter');
+
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
+    if (statusFilter) statusFilter.addEventListener('change', applyFilters);
+    if (ratingFilter) ratingFilter.addEventListener('change', applyFilters);
+}
+
+function applyFilters() {
+    const searchTerm = document.getElementById('book-search')?.value.toLowerCase() || '';
+    const statusFilter = document.getElementById('status-filter')?.value || '';
+    const ratingFilter = document.getElementById('rating-filter')?.value || '';
+
+    let filteredBooks = bookClubData.books.filter(book => {
+        // Search filter
+        const matchesSearch = !searchTerm ||
+            book.title.toLowerCase().includes(searchTerm) ||
+            book.author.toLowerCase().includes(searchTerm);
+
+        // Status filter
+        const matchesStatus = !statusFilter || book.status === statusFilter;
+
+        // Rating filter
+        let matchesRating = true;
+        if (ratingFilter) {
+            const minRating = parseInt(ratingFilter);
+            matchesRating = book.rating >= minRating;
+        }
+
+        return matchesSearch && matchesStatus && matchesRating;
+    });
+
+    displayBooks(filteredBooks);
 }
